@@ -1,294 +1,148 @@
-%%%%
-% MTecknology's Resume
-%%%%
-% Author: Michael Lustfield
-% License: CC-BY-4
-% - https://creativecommons.org/licenses/by/4.0/legalcode.txt
-%%%%
-
 \documentclass[letterpaper,10pt]{article}
-%%%%%%%%%%%%%%%%%%%%%%%
-%% BEGIN_FILE: mteck.sty
-%% NOTE: Everything between here and END_FILE can
-%% be relocated to "mteck.sty" and then included with:
-%\usepackage{mteck}
 
-% Dependencies
-% NOTE: Some packages (lastpage, hyperref) require second build!
+\usepackage{latexsym}
 \usepackage[empty]{fullpage}
 \usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{verbatim}
 \usepackage{enumitem}
 \usepackage[hidelinks]{hyperref}
 \usepackage{fancyhdr}
-\usepackage{fontawesome5}
-\usepackage{multicol}
-\usepackage{bookmark}
-\usepackage{lastpage}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+\input{glyphtounicode}
 
-% Sans-Serif
-%\usepackage[sfdefault]{FiraSans}
-%\usepackage[sfdefault]{roboto}
-%\usepackage[sfdefault]{noto-sans}
-%\usepackage[default]{sourcesanspro}
+% Font options
+\usepackage[sfdefault]{roboto}  % Sans-serif font
 
-% Serif
-\usepackage{CormorantGaramond}
-\usepackage{charter}
-
-% Colors
-% Use with \color{Name}
-% Can wrap entire heading with {\color{accent} [...] }
-\usepackage{xcolor}
-\definecolor{accentTitle}{HTML}{000000}
-\definecolor{accentText}{HTML}{000000}
-\definecolor{accentLine}{HTML}{000000}
-
-% Misc. Options
 \pagestyle{fancy}
 \fancyhf{}
 \fancyfoot{}
 \renewcommand{\headrulewidth}{0pt}
 \renewcommand{\footrulewidth}{0pt}
-\urlstyle{same}
 
-% Adjust Margins
-\addtolength{\oddsidemargin}{-0.7in}
+\addtolength{\oddsidemargin}{-0.5in}
 \addtolength{\evensidemargin}{-0.5in}
-\addtolength{\textwidth}{1.19in}
-\addtolength{\topmargin}{-0.7in}
-\addtolength{\textheight}{1.4in}
+\addtolength{\textwidth}{1in}
+\addtolength{\topmargin}{-.5in}
+\addtolength{\textheight}{1.0in}
 
-\setlength{\multicolsep}{-3.0pt}
-\setlength{\columnsep}{-1pt}
-\setlength{\tabcolsep}{0pt}
-\setlength{\footskip}{3.7pt}
+\urlstyle{same}
 \raggedbottom
 \raggedright
+\setlength{\tabcolsep}{0in}
 
-% ATS Readability
-\input{glyphtounicode}
+% Section formatting
+\titleformat{\section}{\Large\bfseries\scshape\raggedright}{}{0em}{}[\titlerule]
+
+% Ensure PDF is machine readable
 \pdfgentounicode=1
 
-%-----------------%
-% Custom Commands %
-%-----------------%
-
-% Centered title along with subtitle between HR
-% Usage: \documentTitle{Name}{Details}
-\newcommand{\documentTitle}[2]{
-  \begin{center}
-    {\Huge\scshape\color{accentTitle} #1}
-    \vspace{10pt}
-    {\color{accentLine} \hrule}
-    \vspace{2pt}
-    %{\footnotesize\color{accentTitle} #2}
-    \footnotesize{#2}
-    \vspace{2pt}
-    {\color{accentLine} \hrule}
-  \end{center}
+% Custom commands
+\newcommand{\resumeItem}[1]{\item\small{#1}}
+\newcommand{\resumeSubheading}[4]{
+\vspace{-1pt}\item
+  \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+    \textbf{#1} & #2 \\
+    \textit{#3} & \textit{#4} \\
+  \end{tabular*}\vspace{-7pt}
 }
+\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+\newcommand{\resumeSubHeadingList}{\begin{itemize}[leftmargin=0.15in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
 
-% Create a footer with correct padding
-% Usage: \documentFooter{\thepage of X}
-\newcommand{\documentFooter}[1]{
-  \setlength{\footskip}{10.25pt}
-  \fancyfoot[C]{\footnotesize #1}
-}
-
-% Simple wrapper to set up page numbering
-% Usage: \numberedPages
-% WARNING: Must run pdflatex twice!
-\newcommand{\numberedPages}{
-  \documentFooter{\thepage/\pageref{LastPage}}
-}
-
-% Section heading with horizontal rule
-% Usage: \section{Title}
-\titleformat{\section}{
-  \vspace{-5pt}
-  \color{accentText}
-  \scshape\raggedright\large\bfseries
-}{}{0em}{}[\color{accentLine}\titlerule]
-
-% Section heading with separator and content on same line
-% Usage: \tinysection{Title}
-\newcommand{\tinysection}[1]{
-  \phantomsection
-  \addcontentsline{toc}{section}{#1}
-  {\scshape\large{\bfseries\color{accentText}#1} {\color{accentLine} |}}
-}
-
-% Indented line with arguments left/right aligned in document
-% Usage: \heading{Left}{Right}
-\newcommand{\heading}[2]{
-  \hspace{10pt}#1\hfill#2\\
-}
-
-% Adds \textbf to \heading
-\newcommand{\headingBf}[2]{
-  \heading{\textbf{#1}}{\textbf{#2}}
-}
-
-% Adds \textit to \heading
-\newcommand{\headingIt}[2]{
-  \heading{\textit{#1}}{\textit{#2}}
-}
-
-% Template for itemized lists
-% Usage: \begin{resume_list} [items] \end{resume_list}
-\newenvironment{resume_list}{
-  \vspace{-7pt}
-  \begin{itemize}[itemsep=-2px, parsep=1pt, leftmargin=30pt]
-}{
-  \end{itemize}
-  %\vspace{-2pt}
-}
-
-% Formats an item to use as an itemized title
-% Usage: \itemTitle{Title}
-\newcommand{\itemTitle}[1]{
-  \item[] \underline{#1}\vspace{4pt}
-}
-
-% Bullets used in itemized lists
-\renewcommand\labelitemi{--}
-
-%% END_FILE: mteck.sty
-%%%%%%%%%%%%%%%%%%%%%%
-
-
-%===================%
-% John Doe's Resume %
-%===================%
-
-%\numberedPages % NOTE: lastpage requires a second build
-%\documentFooter{\thepage of 2} % Does similar without using lastpage
 \begin{document}
 
-  %---------%
-  % Heading %
-  %---------%
+\begin{center}
+  \textbf{\Huge Igor Lisboa} \\
+  \small 
+  \href{tel:+5521997427343}{+55 21 99742 7343} $|$ 
+  \href{mailto:igor.rodrigues.lisboa@gmail.com}{igor.rodrigues.lisboa@gmail.com} $|$ 
+  \href{https://linkedin.com/in/igor-lisboa-261020141}{linkedin.com/in/igor-lisboa-261020141} $|$
+  \href{https://github.com/igor-lisboa}{github.com/igor-lisboa}
+\end{center}
 
-  \documentTitle{IGOR LISBOA}{
-    % Web Version
-    %\raisebox{-0.05\height} \faPhone\ [redacted - web copy] ~
-    %\raisebox{-0.15\height} \faEnvelope\ [redacted - web copy] ~
-    %%
-    \href{tel:5521997427343}{
-      \raisebox{-0.05\height} \faPhone\ +55 (21) 99742-7343} ~
-    \href{mailto:igor.rodrigues.lisboa@gmail.com}{
-      \raisebox{-0.15\height} \faEnvelope\ igor.rodrigues.lisboa@gmail.com} ~
-    \href{https://www.linkedin.com/in/igor-lisboa-261020141/}{
-      \raisebox{-0.15\height} \faLinkedin\ linkedin.com/in/igor-lisboa-261020141} ~
-    \href{https://github.com/igor-lisboa}{
-      \raisebox{-0.15\height} \faGithub\ github.com/igor-lisboa}
-  }
+\section*{Summary}
+Full stack developer with 7 years of experience in the financial, real estate, and medical industries.
 
-  %---------%
-  % Summary %
-  %---------%
+\section{Technical Skills}
+\resumeSubHeadingList
+  \resumeItem{\textbf{Languages}: C\#, PL/SQL, JavaScript, PHP, Java, Python, C, C++, VB, ASP.}
+  \resumeItem{\textbf{Technologies}: .NET, TypeScript, React, PostgreSQL, Rabbit MQ, Docker, Kubernetes, CI/CD, Azure DevOps, GIT Hub, GIT Lab, AWS, S3, SQS, Dynamo DB, Mongo DB, Redis, SQL Server, MySQL, Oracle, Vue, Laravel, Spring.}
+\resumeSubHeadingListEnd
 
-  \tinysection{Summary}
-  Full stack developer with 7 years of experience in the financial, real estate, and medical industries.
+\section{Education}
+\resumeSubHeadingList
+  \resumeSubheading
+      {\href{https://www.ic.uff.br/}{Universidade Federal Fluminense (UFF)}}{}
+      {Bachelor's degree in Information Systems}{Jan 2017 -- Jan 2022}
+\resumeSubHeadingListEnd
 
-  %--------%
-  % Skills %
-  %--------%
-
-\section{Skills}
-
-
-\begin{itemize}[itemsep=-2px, parsep=1pt, leftmargin=75pt]
-  \item[\textbf{Languages}] C\#, PL/SQL, JavaScript, PHP, Java, Python, C, C++, VB, ASP.
-  \item[\textbf{Technologies}] .NET, TypeScript, React, PostgreSQL, Rabbit MQ, Docker, Kubernetes, CI/CD, Azure DevOps, GIT Hub, GIT Lab, AWS, S3, SQS, Dynamo DB, Mongo DB, Redis, SQL Server, MySQL, Oracle, Vue, Laravel, Spring.
-\end{itemize}
-
-
-
-%-----------%
-% Education %
-%-----------%
-
-\section{Academic Background}
-
-\headingBf{Universidade Federal Fluminense (UFF)}{2017 - 2022} % Note: Adding year(s) exposes an implied age
-\headingIt{Bachelor's degree in Information Systems}{}
-
-
-
-%-----------%
-% Languages %
-%-----------%
+\section{Experience}
+\resumeSubHeadingList
+  \resumeSubheading
+      {Full Stack Software Engineer}{Jan 2024 -- current}
+      {\href{https://prognum.com.br/}{Prognum}}{}
+      \resumeSubHeadingList
+          \resumeItem{\textbf{Developed a module (API, Worker Services, Front-End) to automatically track the real estate asset payments.}}
+          \resumeItem{\textbullet\ RESULT - Approximately 90\% time savings in monitoring by analysts (resulting in approximately \textbf{BRL 200K/year} savings or around \textbf{2000 hours} saved).}
+          \resumeItem{\textbullet\ TECH - .NET, C\#, React, PostgreSQL, Rabbit MQ, Docker, CI/CD, GIT Hub, AWS, EDA (Event-driven architecture), TDD (Test-driven development).}
+      \resumeSubHeadingListEnd
+  \resumeSubheading
+      {Full Stack Developer}{Jul 2021 -- Jan 2024}
+      {\href{https://www.btgpactual.com/}{BTG Pactual Bank}}{}
+      \resumeSubHeadingList
+          \resumeItem{\textbf{Developed APIs, Worker Services, Front-Ends for trading financial assets, with flexible parameterizable rules.}}
+          \resumeItem{\textbullet\ RESULT - This enabled the Bank to expand its asset portfolio to include new assets with very high transaction volumes, with mandatory flexible parameterization rules. Potential AUM of more than \textbf{BRL 4 billion} per year due to the new funds in operation.}
+          \resumeItem{\textbullet\ TECH - .NET, C\#, React, Rabbit MQ, PostgreSQL, Docker, Kubernetes, CI/CD, Azure DevOps, Redis, AWS, S3, Dynamo, EDA (Event-driven architecture), TDD (Test-driven development).}
+      \resumeSubHeadingListEnd
+      \resumeSubHeadingList
+          \resumeItem{\textbf{Developed scalable microservice in .NET for settling financial assets.}}
+          \resumeItem{\textbullet\ RESULT - Reduced the average response time from \textbf{1.2 seconds to 0.45 seconds} and centralized the daily load volume in the new microservice (previously handled by multiple disparate systems).}
+          \resumeItem{\textbullet\ TECH - .NET, C\#, Vue, Rabbit MQ, PostgreSQL, Docker, Kubernetes, CI/CD, Azure DevOps, AWS, Redis, TDD (Test-driven development).}
+      \resumeSubHeadingListEnd
+      \resumeSubHeadingList
+          \resumeItem{\textbf{Developed automation for reports for Investment Funds (Performance, Management, Portfolio Composition, Liquidity).}}
+          \resumeItem{\textbullet\ RESULT - Approximately 15\% time savings for 2 analysts, resulting in a savings of \textbf{BRL 150K/year}.}
+          \resumeItem{\textbullet\ TECH - .NET, C\#, React, Rabbit MQ, SQL Server, Docker, Kubernetes, CI/CD, Azure DevOps, AWS, TDD (Test-driven development), Razor.}
+      \resumeSubHeadingListEnd
+  \resumeSubheading
+      {Full Stack Software Developer}{Oct 2020 -- Jul 2021}
+      {\href{https://www.oliveiratrust.com.br/}{Oliveira Trust}}{}
+      \resumeSubHeadingList
+          \resumeItem{\textbf{Developed scalable containerized APIs and queue consumers for managing investment fund operations.}}
+          \resumeItem{\textbullet\ RESULT - Enabled the decommissioning of modules from a legacy monolith and give a operational improvements to the analysts responsible to manage investment funds resulting in approximately  23\% time savings for analyst, resulting in a savings of BRL 67,000/year.}
+          \resumeItem{\textbullet\ TECH - PHP, Laravel, React, AWS, S3, SQS, SQL Server, MySQL, Docker, Kubernetes, CI/CD, GIT Lab, TDD (Test-driven development).}
+      \resumeSubHeadingListEnd
+  \resumeSubheading
+      {Full Stack Developer}{Nov 2016 -- Oct 2020}
+      {\href{https://intercraft.inf.br/}{Intercraft}}{}
+      \resumeSubHeadingList
+          \resumeItem{\textbf{Developed a voting module (API, Front-End) that was used in medical society elections.}}
+          \resumeItem{\textbullet\ RESULT - This product eliminated the need for voters to travel to the headquarters and manually tally votes by 3 employees of the medical societies. Everything is now handled via the system in an easy and direct manner.}
+          \resumeItem{\textbullet\ TECH - Laravel, PHP, MySQL, React, IIS.}
+      \resumeSubHeadingListEnd
+      \resumeSubHeadingList
+          \resumeItem{\textbf{Developed a platform for registration, configuration, and provision of 360º virtual tours.}}
+          \resumeItem{\textbullet\ RESULT - Once it made virtual tours available, our real estate client saw an increase in website traffic and an improvement in visitor retention.}
+          \resumeItem{\textbullet\ TECH - Laravel, PHP, MYSQL, Vue, IIS.}
+      \resumeSubHeadingListEnd
+      \resumeSubHeadingList
+          \resumeItem{\textbf{Developed a system for issuing and processing invoices for medical societies and condominiums.}}
+          \resumeItem{\textbullet\ RESULT - Automation to register invoices and process payments automatically replaced what previously required a team of 6 people at just one of the clients.}
+          \resumeItem{\textbullet\ TECH - .NET, C\#, React, PostgreSQL, Docker, GIT Hub, Windows Forms.}
+      \resumeSubHeadingListEnd
+\resumeSubHeadingListEnd
 
 \section{Languages}
-
-\begin{multicols}{2}
-    \headingBf{English (Advanced)}{}
-    
-    
-    \headingBf{Portuguese (Native)}{}
-\end{multicols}
-
-  
-  %------------%
-  % Experience %
-  %------------%
-
-  \section{Experiences}
-
-  \headingBf{Prognum}{Jan 2024 -- current}
-  \headingIt{Software Engineer}{}
-  \begin{resume_list}
-    \itemTitle{Developed a module (API, Worker Services, Front-End) to automatically track the real estate asset payments.}
-    \item RESULT - Approximately 90\% time savings in monitoring by analysts (resulting in approximately \textbf{BRL 200K/year} savings or around \textbf{2000 hours} saved).
-    \item TECH - .NET, C\#, React, PostgreSQL, Rabbit MQ, Docker, CI/CD, GIT Hub, AWS, EDA (Event-driven architecture), TDD (Test-driven development).
-  \end{resume_list}
-
-  \headingBf{BTG Pactual Bank}{Jul 2021 -- Jan 2024}
-  \headingIt{Full Stack Developer}{}
-  \begin{resume_list}
-    \itemTitle{Developed APIs, Worker Services, Front-Ends for trading financial assets, with flexible parameterizable rules.}
-    \item RESULT - This enabled the Bank to expand its asset portfolio to include new assets with very high transaction volumes, with mandatory flexible parameterization rules. Potential AUM of more than \textbf{BRL 4 billion} per year due to the new funds in operation.
-    \item TECH - .NET, C\#, React, Rabbit MQ, PostgreSQL, Docker, Kubernetes, CI/CD, Azure DevOps, Redis, AWS, S3, Dynamo, EDA (Event-driven architecture), TDD (Test-driven development).
-    \vspace{5pt}
-    \itemTitle{Developed scalable microservice in .NET for settling financial assets.}
-    \item RESULT - Reduced the average response time from \textbf{1.2 seconds to 0.45 seconds} and centralized the daily load volume in the new microservice (previously handled by multiple disparate systems). 
-    \item TECH - .NET, C\#, Vue, Rabbit MQ, PostgreSQL, Docker, Kubernetes, CI/CD, Azure DevOps, AWS, Redis, TDD (Test-driven development).
-    \vspace{5pt}
-    \itemTitle{Developed automation for reports for Investment Funds (Performance, Management, Portfolio Composition, Liquidity).}
-    \item RESULT - Approximately 15\% time savings for 2 analysts, resulting in a savings of \textbf{BRL 150K/year}.
-    \item TECH - .NET, C\#, React, Rabbit MQ, SQL Server, Docker, Kubernetes, CI/CD, Azure DevOps, AWS, TDD (Test-driven development), Razor.
-  \end{resume_list}
-
-
-  \headingBf{Oliveira Trust}{Oct 2020 -- Jul 2021}
-  \headingIt{Software Developer}{}
-  \begin{resume_list}
-    \itemTitle{Developed scalable containerized APIs and queue consumers for managing investment fund operations.}
-    \item RESULT - Enabled the decommissioning of modules from a legacy monolith and give a operational improvements to the analysts responsible to manage investment funds resulting in approximately  23\% time savings for analyst, resulting in a savings of BRL 67,000/year.
-    \item TECH - PHP, Laravel, React, AWS, S3, SQS, SQL Server, MySQL, Docker, Kubernetes, CI/CD, GIT Lab, TDD (Test-driven development).
-  \end{resume_list}
-
-
-  \headingBf{Intercraft}{Nov 2016 -- Oct 2020}
-  \headingIt{Full Stack Developer}{}
-  \begin{resume_list}
-    \itemTitle{Developed a voting module (API, Front-End) that was used in medical society elections.}
-    \item RESULT - This product eliminated the need for voters to travel to the headquarters and manually tally votes by 3 employees of the medical societies. Everything is now handled via the system in an easy and direct manner.
-    \item TECH - Laravel, PHP, MySQL, React, IIS.
-    
-    \vspace{5pt}
-    \itemTitle{Developed a platform for registration, configuration, and provision of 360º virtual tours.}
-    \item RESULT - Once it made virtual tours available, our real estate client saw an increase in website traffic and an improvement in visitor retention.
-    \item TECH - Laravel, PHP, MYSQL, Vue, IIS.
-    
-    \vspace{5pt}
-    \itemTitle{Developed a system for issuing and processing invoices for medical societies and condominiums.}
-    \item RESULT - Automation to register invoices and process payments automatically replaced what previously required a team of 6 people at just one of the clients.
-    \item TECH - .NET, C\#, React, PostgreSQL, Docker, GIT Hub, Windows Forms.
-  \end{resume_list}
-
-
-  
+\resumeSubHeadingList
+  \resumeSubheading
+      {English}{}
+      {Advanced}{}
+  \resumeSubheading
+      {Portuguese}{}
+      {Native}{}
+\resumeSubHeadingListEnd
 
 \end{document}
